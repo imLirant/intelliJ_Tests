@@ -1,17 +1,15 @@
 package Test;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
+import org.testng.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.experimental.max.CouldNotReadCoreException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 public class FirstTest {
@@ -20,7 +18,7 @@ public class FirstTest {
 
     @BeforeClass
     public static void setup() {
-        System.setProperty("webdriver.chrome.driver", "E://chromedriver//chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "chromedriver//chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
