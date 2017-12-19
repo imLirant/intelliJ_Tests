@@ -21,45 +21,46 @@ public class FirstTest {
         System.setProperty("webdriver.chrome.driver", "chromedriver//chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.get("http://193.189.127.179:5010/timeTable/group");
     }
     @Test
     public void Test_1()//gotoStudent
     {
-        WebElement student = null;
-        try
+        String studentXpath = "/html/body/div[3]/div[1]/ul/li/ul/li[4]/a";
+        System.out.append("Запущен тест 1\n");
+        WebElement student = driver.findElement(By.xpath(studentXpath));
+        String name;
+        if (student.isDisplayed())
         {
-            student = driver.findElement(By.linkText("Студента"));
-        }
-        catch (org.openqa.selenium.NoSuchElementException e)
-        {
-            try
-            {
-                student = driver.findElement(By.linkText("Student`s"));
-            }
-            catch (org.openqa.selenium.NoSuchElementException ex)
-            {
-                Assert.fail("Не найдена ссылка на расписание студента");
-            }
-        }
-        if (student != null)
-        {
+            name = student.getText();
             student.click();
-            Assert.assertEquals("http://193.189.127.179:5010/timeTable/student", driver.getCurrentUrl());
         }
+        else
+        {
+            WebElement menu = driver.findElement(By.xpath("/html/body/div[3]/div[1]/ul/li/a"));
+            menu.click();
+            student = driver.findElement(By.xpath(studentXpath));
+            name = student.getText();
+            student.click();
+        }
+        System.out.append("Перешел на страницу '" + name + "'\n");
     }
 
     @Test
     public void Test_2() //selectEN
     {
-        if (!ChangeLang("EN"))
+        System.out.append("Запущен тест 2\n");
+        String Lang = "EN";
+        if (!ChangeLang(Lang))
             Assert.fail("Не удалось изменить язык");
+        else System.out.append("Язык страницы установлен на '" + Lang + "'\n");
     }
 
     @Test
     public void Test_3()
     {
+        System.out.append("Запущен тест 3\n");
         Assert.assertEquals("http://193.189.127.179:5010/timeTable/student", driver.getCurrentUrl());
 
         String Faculty  = "Факультет електроніки та комп'ютерної інженерії";
@@ -70,13 +71,13 @@ public class FirstTest {
         if(select("faculty", Faculty)) System.out.append("Был выбран Факультет: " + Faculty + "\n");
         else Assert.fail("Ошибка при выполнении выбора факультета");
 
-        if (select("course",Course)) System.out.append("Был выбран курс: " + Course + "\n");
+        if (select("course", Course)) System.out.append("Был выбран курс: " + Course + "\n");
         else Assert.fail("Ошибка при выполнении выбора курса");
 
-        if (select("group",Group)) System.out.append("Была выбрана группа: " + Group + "\n");
+        if (select("group", Group)) System.out.append("Была выбрана группа: " + Group + "\n");
         else Assert.fail("Ошибка при выполнении выбора группы");
 
-        if (select("student",Student)) System.out.append("Был выбран Студент: " + Student + "\n");
+        if (select("student", Student)) System.out.append("Был выбран Студент: " + Student + "\n");
         else Assert.fail("Ошибка при выполнении выбора студента");
     }
 
@@ -113,7 +114,7 @@ public class FirstTest {
             Chose = driver.findElement(By.id("TimeTableForm_" + Type + "_chosen"));
             Chose.click();
         }
-        List<WebElement> choseList = null;
+        List<WebElement> choseList;
         try
         {
              choseList = Chose.findElements(By.className("active-result"));
@@ -135,22 +136,6 @@ public class FirstTest {
             }
         }
         return result;
-    }
-    public void FindMe()
-    {
-        WebElement text;
-        try
-        {
-            text = driver.findElement(By.id("St_st2"));
-        }
-        catch (org.openqa.selenium.NoSuchElementException e)
-        {
-            return;
-        }
-
-        text.sendKeys("Дудник");
-        WebElement button = driver.findElement(By.name("yt0"));
-        button.click();
     }
     @AfterClass
     public static void tearDown()
