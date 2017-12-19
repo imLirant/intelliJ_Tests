@@ -1,9 +1,10 @@
 package Test;
 
-import org.junit.AfterClass;
+import org.testng.annotations.Test;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -79,8 +80,36 @@ public class FirstTest {
 
         if (select("student", Student)) System.out.append("Был выбран Студент: " + Student + "\n");
         else Assert.fail("Ошибка при выполнении выбора студента");
+
     }
 
+    @Test
+    public void Test_4()
+    {
+        System.out.append("Запущен тест 4\n");
+        Assert.assertEquals("http://193.189.127.179:5010/timeTable/student", driver.getCurrentUrl());
+        String weekButtonPath = "/html/body/div[3]/div[2]/div[2]/div[2]/div/div/div[2]/table/tbody/tr/td[3]/span[2]";
+        WebElement weekButton;
+
+        try
+        {
+            weekButton = driver.findElement(By.xpath(weekButtonPath));
+            weekButton.click();
+        }
+        catch (org.openqa.selenium.NoSuchElementException e)
+        {
+            WebElement checkBox;
+            checkBox = driver.findElement(By.id("checkbox-timeTable"));
+            checkBox.click();
+            weekButton = driver.findElement(By.xpath(weekButtonPath));
+            weekButton.click();
+        }
+    }
+    @AfterClass
+    public static void tearDown()
+    {
+        driver.close();
+    }
     public boolean ChangeLang(String langCode)
     {
         boolean result = false;
@@ -117,7 +146,7 @@ public class FirstTest {
         List<WebElement> choseList;
         try
         {
-             choseList = Chose.findElements(By.className("active-result"));
+            choseList = Chose.findElements(By.className("active-result"));
         }
         catch (org.openqa.selenium.StaleElementReferenceException e)
         {
@@ -136,10 +165,5 @@ public class FirstTest {
             }
         }
         return result;
-    }
-    @AfterClass
-    public static void tearDown()
-    {
-        driver.close();
     }
 }
